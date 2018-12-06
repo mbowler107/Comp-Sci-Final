@@ -1,0 +1,32 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	float a, c, b;
+	cout << "        /\\ " << endl;
+	cout << "       / |\\ " << endl;
+	cout << "   a  /  | \\ c " << endl;
+	cout << "     /   |  \\ " << endl;
+	cout << "    /____|___\\ " << endl;
+	cout << "         b       " << endl;
+	cout << "This is a simple equation to find out the legs and angle of a scalene triangle" << endl;
+	cout << "Please put numbers for a and c." << endl;
+	cout << "a: ";
+	cin >> a;
+	cout << endl;
+	cout << "c: ";
+	cin >> b;
+	cout << endl;
+	do
+	{
+		cout << "ERROR: side a and side c cannot be the same length. Please try again." << endl;
+		cout << "a: ";
+		cin >> a;
+		cout << endl;
+		cout << "c: ";
+		cin >> b;
+		cout << endl;
+	} while (a == c);
+
+
