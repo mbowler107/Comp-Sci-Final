@@ -1,0 +1,61 @@
+//Jim Arguel, Michelle Bowler, Angel Zhang
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+const int PI = 3.14159265;
+
+double isotrianglealt( double l, double b);
+float acosIsoAngleA(float l, float b, float a);
+double acosApex(double b, double l);
+
+double isotrianglealt(double l, double b)													//b = base, l= leg, a= altitude
+{																							//isotrianglealt calculates the altitude of the isocolese triangle.
+	double a;
+	a = sqrt(pow(l, 2) - pow((b / 2), 2));												 //equation: A = square root ((leg)^2 - ((b/2)^2)
+	return a;
+}
+
+float acosisoAngleA(float l, float b, float a)										 //Calculate Angle A
+{
+	float A;
+	A = acos(b /(2 * l));																//equation: cos((base)/(2*leg)
+	return A * 180/PI;
+}
+
+double acosApex(double b, double l)												
+{
+	double V;																			//V= Apex Angle
+	V = acos ((2 * pow(l, 2) - pow(b, 2)) / (2 * pow(l, 2)));							// arccos( ( 2 * leg² - base² ) / (2 * leg²) )
+	return V * 180/PI;
+}
+int main()
+{
+	float l, a, b, A, V;
+	cout << "                     " << endl;
+	cout << "           V         " << endl;
+	cout << "          /|\\       " << endl;
+	cout << "         / | \\      " << endl;
+	cout << "        /  |  \\     " << endl;
+	cout << "       /   |a  \\ l  " << endl;
+	cout << "      /   _|_   \\   " << endl;
+	cout << "     /___|_|_|___\\  " << endl;
+	cout << "   A         b     A " << endl;
+	cout << "This is a simple triangle to calculate the length and angles of an isocolese triangle." << endl;
+	cout << "Please input the length of the leg and the altitude of the triangle: " << endl;
+	cout << "leg (l) = ";
+	cin >> l;
+	cout << endl;
+	cout << "base(b) = ";
+	cin >> b;
+	cout << endl;
+	a = isotrianglealt(l, b);
+	cout << "The answer is " << a << endl;
+	A = acosisoAngleA(l, b, a);
+	cout << "Both Angle As equal " << A << endl;
+	V = acosApex(b, l);
+	cout << "The Apex Angle equals " << V << endl;
+
+	return 0;
+}
