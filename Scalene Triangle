@@ -1,32 +1,95 @@
+//Scalene Triangle problem
+//Jim, Michelle, Angel
 #include <iostream>
+#include <cmath>
 using namespace std;
+const double PI = 3.14159;
 
+struct ScaleneTriangle
+{
+	
+	float side1;
+	float side2;
+	float base;
+	float b1;
+	float b2;
+	float area;
+	float height;
+	float angleA;
+	float radianAngleA;
+	float angleB;
+	float radianAngleB;
+	float angleApex;
+	float radianAngleApex;
+};
+
+
+
+void ScaleneHeight(ScaleneTriangle &inputTriangle)
+{
+	inputTriangle.height = sin(inputTriangle.angleA)*inputTriangle.side1;
+	cout << "Height = " << inputTriangle.height << endl;
+}
+
+void ScaleneArea(struct ScaleneTriangle &inputTriangle)
+{
+	inputTriangle.area = (inputTriangle.height * inputTriangle.base) / 2;							//area of triangle = (base * height)/2
+	cout << "Area = " << inputTriangle.area << endl;
+	
+}
+
+void ScaleneSide2(struct ScaleneTriangle &inputTriangle)
+{
+	inputTriangle.radianAngleA = inputTriangle.angleA * (PI / 180);                                   // convert angleA from degrees to radians
+	inputTriangle.b1 = cos(inputTriangle.radianAngleA) * inputTriangle.side1;						//bisecting base with b1 and b2 with goal of finding side c
+	inputTriangle.b2 = inputTriangle.base - inputTriangle.b1;									//subtract b1 from base to get b2
+	inputTriangle.side2 = sqrt(pow(inputTriangle.height, 2) * pow(inputTriangle.b2, 2));		//Pythagoreon Theorem to find side 2: side2 = square root (height ^ 2) x (b2 ^ 2)
+	cout << "Side 2 = " << inputTriangle.side2 << endl;										
+	
+}
+
+void ScaleneAngleB(struct ScaleneTriangle &inputTriangle)
+{
+	inputTriangle.angleB = (acos(inputTriangle.height / inputTriangle.side2) * (180/PI));		//calculate angle b by taking the arccosin of height divided by 2; multiply the entire thing by 180/PI in order to convert from radians to degrees.
+	cout << "Angle B = " << inputTriangle.angleB << endl;
+}
+
+void ScaleneApexAngle(struct ScaleneTriangle &inputTriangle)
+{
+	inputTriangle.angleApex = 180 - (inputTriangle.angleA + inputTriangle.angleB);             //calculate apex angle by taking 180 degrees and subtracting it by the sum of angle a and angle b
+	cout << "Apex Angle = " << inputTriangle.angleApex;
+}
 int main()
 {
-	float a, c, b;
-	cout << "        /\\ " << endl;
-	cout << "       / |\\ " << endl;
-	cout << "   a  /  | \\ c " << endl;
-	cout << "     /   |  \\ " << endl;
-	cout << "    /____|___\\ " << endl;
-	cout << "         b       " << endl;
-	cout << "This is a simple equation to find out the legs and angle of a scalene triangle" << endl;
-	cout << "Please put numbers for a and c." << endl;
-	cout << "a: ";
-	cin >> a;
+	struct ScaleneTriangle myTriangle;
+	cout << "         Apex Angle            " << endl;
+	cout << "             *       " << endl;
+	cout << "           * * *      " << endl;
+	cout << "          *  *   *     " << endl;
+	cout << " side1   *   *h    * side 2  " << endl;
+	cout << "        *    *       * " << endl;
+	cout << "       *     *         * " << endl;
+	cout << "Angle ******************* Angle" << endl;
+	cout << " A          base            B       " << endl;
 	cout << endl;
-	cout << "c: ";
-	cin >> b;
+	cout << "Welcome! " << endl;
+	cout << "This is a simple program to calculate the properties of a scalene triangle." << endl;
 	cout << endl;
-	do
-	{
-		cout << "ERROR: side a and side c cannot be the same length. Please try again." << endl;
-		cout << "a: ";
-		cin >> a;
-		cout << endl;
-		cout << "c: ";
-		cin >> b;
-		cout << endl;
-	} while (a == c);
-
-
+	cout << "First, please enter side 1 for your triangle: ";
+	cin >> myTriangle.side1; 
+	cout << endl;
+	cout << "Enter the base for your triangle: ";
+	cin >> myTriangle.base;
+	cout << endl;
+	cout << "Enter one of the angles in your triangle: ";
+	cin >> myTriangle.angleA;
+	cout << endl;
+	
+	ScaleneHeight(myTriangle);
+	ScaleneArea(myTriangle);
+	ScaleneSide2(myTriangle);
+	ScaleneAngleB(myTriangle);
+	ScaleneApexAngle(myTriangle);
+	
+	return 0;
+}
