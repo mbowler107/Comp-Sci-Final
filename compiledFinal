@@ -121,10 +121,10 @@ double atanAngleB(double side1, double side2)									//used to calculate the ta
 	atanAngleB = atan(side2 / side1);
 	return atanAngleB * 180 / PI;
 }
-double RightTriangleArea(float side1, float side2)
+double RightTriangleArea(float side1, float side2)							//calculate the area of a right triangle
 {
 	float area;
-	area = (side1*side2) / 2;
+	area = (side1*side2) / 2;												//area calculation: (side1*side2)/2
 	return area;
 }
 void quad(double angle)				//used to calculate which quadrant angle is in
@@ -147,10 +147,10 @@ void quad(double angle)				//used to calculate which quadrant angle is in
 	}
 }
 
-double RightTrianglePerimeter(float side1, float side2)
+double RightTrianglePerimeter(float side1, float side2)									//perimeter calculation
 {
 	float perimeter;
-	perimeter = side1 + side2 + (sqrt(pow(side1, 2) + pow(side2, 2)));
+	perimeter = side1 + side2 + (sqrt(pow(side1, 2) + pow(side2, 2)));					//side1 + side2 + squareRoot(side1^2+side2^2)
 	return perimeter;
 }
 //Here are the functions for the Isocelese Triangle: 
@@ -175,16 +175,16 @@ double acosApex(double b, double l)
 	return V * 180 / PI;
 }
 
-double isoTriangleArea(float b, float a)
+double isoTriangleArea(float b, float a)												//Area of isoscelese triangle
 {
 	float area;
-	area = 0.5* (b * a);
+	area = 0.5* (b * a);																// area equation = 0.5*(side b + side a)
 	return area;
 }
-double isoTrianglePerimeter(float b, float a)
+double isoTrianglePerimeter(float b, float a)											//perimeter of isoselese triangle		
 {
 	float perimeter;
-	perimeter = 2 * (a + b);
+	perimeter = 2 * (a + b);															//perimeter equation: 2 * (a+b)
 	return perimeter;
 }
 //Here are the following functions for the scalene triangle program: 
@@ -225,9 +225,9 @@ void ScaleneApexAngle(struct ScaleneTriangle &inputTriangle)								//used to fi
 	cout << "Apex Angle (V) = " << inputTriangle.angleApex;
 }
 
-void ScalenePerimeter(struct ScaleneTriangle &inputTriangle)
+void ScalenePerimeter(struct ScaleneTriangle &inputTriangle)									//scalene perimeter equation
 {
-	inputTriangle.perimeter = inputTriangle.side1 + inputTriangle.side2 + inputTriangle.base;
+	inputTriangle.perimeter = inputTriangle.side1 + inputTriangle.side2 + inputTriangle.base;		//perimeter equation = side1 + side2 + side3(aka base)
 	cout << "The perimeter of this triangle = " << inputTriangle.perimeter << endl;
 }
 //Here is the function that calls the intro: 
@@ -253,6 +253,7 @@ int main()
 
 		cout << "Welcome! " << endl << "This is a simple trigonometric program designed to calculate the dimensions and angles of a right triangle." << endl;
 		cout << endl;
+		cout << "        B   " << endl;
 		cout << "       /|  " << endl;
 		cout << "      / |   " << endl;
 		cout << "     /  |   " << endl;
@@ -260,7 +261,7 @@ int main()
 		cout << " h /    |  a " << endl;
 		cout << "  /    _|  " << endl;
 		cout << " /____|_| " << endl;
-		cout << "     b      " << endl;													
+		cout << "A    b   C   " << endl;													
 		cout << "First, please input a value for a and b. \n";
 		cout << "a(side1) = ";															//a == side1
 		cin >> side1;
@@ -326,6 +327,7 @@ int main()
 			cout << "Angle B using inverse tangent:" << atanB << endl;
 		}
 		cout << endl;
+
 		cout << "Please round angle A or B to a whole number and input either.\n";		//start of unit circle section of the right triangle program
 		cin >> angle;
 		cout << endl;
