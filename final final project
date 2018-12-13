@@ -1,0 +1,502 @@
+//"TRIANGLE SOLVER" by Michelle Bowler, Jimuel Arguel, and Angel Zhang. '_'
+
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <string>
+#define PI 3.14159265						
+#define angleC 90
+using namespace std;
+
+//These are the constants used in the factoral equation used in the Right Triangle program (aka Taylor Expansion). using Taylor series with factorials to determine the sine, cosine, and tangent of certain angles. Diminutized here for sake of room and lack of confusion.
+const int twoFactorial = 2;                              //2*1 = 2
+const int threeFactorial = 6;							// 3*2*1 = 6
+const int fourFactorial = 24;							//4*3*2*1 = 24
+const int fiveFactorial = 120;							//5*4*3*2*1 = 120
+const int sixFactorial = 720;							//6*5 * 4 * 3 * 2 * 1 = 720
+const int sevenFactorial = 5040;						//7*6*5 * 4 * 3 * 2 * 1 = 5040
+const int eightFactorial = 40320;						//8*7*6*5 * 4 * 3 * 2 * 1 = 40320
+const int nineFactorial = 362880;						//9*8*7*6*5 * 4 * 3 * 2 * 1 = 362880
+
+														//the following are the functions that the Right Triangle program calls: 
+double hypo(double side1, double side2);
+double asinAngleA(double side1, double side2, double h);
+double asinAngleB(double side1, double side2, double h);
+double atanAngleA(double side1, double side2);
+double RightTriangleArea(float side1, float side2);
+double RightTrianglePerimeter(float side1, float side2);
+void quad();
+
+//the following are the functions that the Isosceles Triangle program calls: 
+double isotrianglealt(double l, double b);
+float acosIsoAngleA(float l, float b, float a);						//Iso = diminutive for Isosceles 
+double acosApex(double b, double l);
+double isoTriangleArea(float b, float a);
+double isoTrianglePerimeter(float b, float l);
+
+//the following is the struct and the functions that the Scalene Triangle program calls and uses: 
+struct ScaleneTriangle
+{
+
+	float side1;
+	float side2;
+	float base;
+	float b1;
+	float b2;
+	float area;
+	float height;
+	float angleA;
+	float radianAngleA;
+	float angleB;
+	float radianAngleB;
+	float angleApex;
+	float radianAngleApex;
+	float perimeter;
+};
+void ScaleneHeight(ScaleneTriangle &inputTriangle);
+void ScaleneArea(struct ScaleneTriangle &inputTriangle);
+void ScaleneSide2(struct ScaleneTriangle &inputTriangle);
+void ScaleneAngleB(struct ScaleneTriangle &inputTriangle);
+void ScaleneApexAngle(struct ScaleneTriangle &inputTriangle);
+void ScalenePerimeter(struct ScaleneTriangle &inputTriangle);
+
+//The following calls the intro function:
+int intro(int choice);
+
+//Here are the functions for Right Triangle:
+double hypo(double side1, double side2)												//used to calculate the hypotenuse
+{
+	double h;																		//Pythagorean Theorem used. h=hypotenuse, side1 = a, side2 = b. 
+	h = sqrt(pow(side1, 2) + pow(side2, 2));										//a^2 + b^2 = c^2; redefined as c = squareroot(a^2 + b^2)
+	return h;
+}
+double asinAngleA(double side1, double side2, double h)							//used to calculate the sine of Angle A
+{
+	double asinA;
+	asinA = asin(side1 / double(h));											//sin (angle A)= (side 1/hypotenuse)
+
+	return asinA * 180 / PI;													//converted back to degrees
+}
+
+double acosAngleA(double side1, double side2, double h)							//used to calculate the cosine of Angle A
+{
+	double acosA;
+	acosA = acos(side2 / double(h));											//cosine angle A = (side2/hypotenuse)
+	return acosA * 180 / PI;												//convert back to degrees
+}
+
+double asinAngleB(double side1, double side2, double h)								//used to calculate the sin of Angle B
+{
+	double asinB;
+	asinB = asin(side2 / h);													//sin angle B = (side2/hypotenuse)				
+	return asinB * 180 / PI;												//convert back to degrees
+}
+
+double acosAngleB(double side1, double side2, double h)							//used to calculate the cosine of Angle B
+{
+	double B;
+	B = acos(side1 / double(h));													//cosine angle B = side1/hypotenuse
+	return B * 180 / PI;														//convert back to degrees
+}
+double atanAngleA(double side1, double side2)								//used to calculate the tangent of Angle A
+{
+
+	double atanAngleA;														//determine tangent of angle A
+	if (side2 == 0)															//tangent =/= 0)
+	{
+		cout << "You cannot divide by O, please enter a different value for side2.\n";
+	}
+
+	atanAngleA = atan(side1 / side2);										//tangent (angle A) = (side1/side2)
+	return atanAngleA * 180 / PI;											//convert back to degrees
+}
+
+double atanAngleB(double side1, double side2)									//used to calculate the tangent of Angle B
+{
+
+	double atanAngleB;
+	if (side1 == 0)
+	{
+		cout << "You cannot divide by O, please enter a different value for side1.\n";
+	}
+
+	atanAngleB = atan(side2 / side1);
+	return atanAngleB * 180 / PI;
+}
+double RightTriangleArea(float side1, float side2)							//calculate the area of a right triangle
+{
+	float area;
+	area = (side1*side2) / 2;												//area calculation: (side1*side2)/2
+	return area;
+}
+void quad(double angle)  //Used to calculate quadrant.
+{
+	if (angle <= 90 && angle > 0 || angle > -360 && angle <= -270)
+	{
+		cout << "The angle is in Quadrant I.\n";
+	}
+	else if (angle > 90 && angle <= 180 || angle > -270 && angle <= -180)
+	{
+		cout << "The angle is in Quadrant II. \n";
+	}
+	else if (angle > 180 && angle <= 270 || angle > -180 && angle <= -90)
+	{
+		cout << "The angle is in Quadrant III.\n";
+	}
+	else if (angle > 270 && angle <= 360 || angle > -90 && angle <= 0)
+	{
+		cout << "The angle is in Quadrant IV.\n";
+	}
+}
+
+double RightTrianglePerimeter(float side1, float side2)									//perimeter calculation
+{
+	float perimeter;
+	perimeter = side1 + side2 + (sqrt(pow(side1, 2) + pow(side2, 2)));					//side1 + side2 + squareRoot(side1^2+side2^2)
+	return perimeter;
+}
+//Here are the functions for the Isosceles  Triangle: 
+double isotrianglealt(double l, double b)													//b = base, l= leg, a= altitude
+{																							//isotrianglealt calculates the altitude of the Isosceles  triangle.
+	double a;
+	a = sqrt(pow(l, 2) - pow((b / 2), 2));												 //equation: A = square root ((leg)^2 - ((b/2)^2)
+	return a;
+}
+
+float acosisoAngleA(float l, float b, float a)										 //Calculate Angle A
+{
+	float A;
+	A = acos(b / (2 * l));																//equation: cos((base)/(2*leg)
+	return A * 180 / PI;
+}
+
+double acosApex(double b, double l)
+{
+	double V;																			//V= Apex Angle
+	V = acos((2 * pow(l, 2) - pow(b, 2)) / (2 * pow(l, 2)));							// arccos( ( 2 * leg² - base² ) / (2 * leg²) )
+	return V * 180 / PI;
+}
+
+double isoTriangleArea(float b, float a)												//Area of Isosceles  triangle
+{
+	float area;
+	area = 0.5* (b * a);																// area equation = 0.5*(side b + side a)
+	return area;
+}
+double isoTrianglePerimeter(float b, float l)											//perimeter of Isosceles  triangle		
+{
+	float perimeter;
+	perimeter = (2 * l) + b;															//perimeter equation: 2 * (a+b)
+	return perimeter;
+}
+//Here are the following functions for the scalene triangle program: 
+
+void ScaleneHeight(ScaleneTriangle &inputTriangle)							//used to find the height of the scalene triangle
+{
+	inputTriangle.radianAngleA = inputTriangle.angleA * (PI / 180);			//convert angle inputted into radians
+	inputTriangle.height = sin(inputTriangle.radianAngleA)*inputTriangle.side1;		//take sin of the angle (in radians) and multiply it by side 1
+	cout << "Height (h)= " << inputTriangle.height << endl;
+}
+
+void ScaleneArea(struct ScaleneTriangle &inputTriangle)							//used to find the area of the triangle
+{
+	inputTriangle.area = (inputTriangle.height * inputTriangle.base) / 2;							//area of triangle = (base * height)/2
+	cout << "Area = " << inputTriangle.area << endl;
+
+}
+
+void ScaleneSide2(struct ScaleneTriangle &inputTriangle)										//used to find the length of side 2
+{
+	inputTriangle.radianAngleA = inputTriangle.angleA * (PI / 180);                                  // convert angleA from degrees to radians
+	inputTriangle.b1 = cos(inputTriangle.radianAngleA) * inputTriangle.side1;						//bisecting base with b1 and b2 with goal of finding side c
+	inputTriangle.b2 = inputTriangle.base - inputTriangle.b1;									//subtract b1 from base to get b2
+	inputTriangle.side2 = sqrt(pow(inputTriangle.height, 2) + pow(inputTriangle.b2, 2));		//Pythagoreon Theorem to find side 2: side2 = square root (height ^ 2) x (b2 ^ 2)
+	
+	
+}
+
+
+void ScaleneAngleB(struct ScaleneTriangle &inputTriangle)									//used to find angle B
+{
+	inputTriangle.angleB = (asin(inputTriangle.height / inputTriangle.side2) * (180 / PI));		//calculate angle b by taking the arcsin of height divided by 2; multiply the entire thing by 180/PI in order to convert from radians to degrees.
+	cout << "Angle B (B) = " << inputTriangle.angleB << endl;
+}
+
+void ScaleneApexAngle(struct ScaleneTriangle &inputTriangle)								//used to find apex angle
+{
+	inputTriangle.angleApex = 180 - (inputTriangle.angleA + inputTriangle.angleB);             //calculate apex angle by taking 180 degrees and subtracting it by the sum of angle a and angle b
+	cout << "Apex Angle (V) = " << inputTriangle.angleApex << endl;
+}
+
+void ScalenePerimeter(struct ScaleneTriangle &inputTriangle)									//scalene perimeter equation
+{
+	inputTriangle.perimeter = inputTriangle.side1 + inputTriangle.side2 + inputTriangle.base;		//perimeter equation = side1 + side2 + side3(aka base)
+	cout << "The perimeter of this triangle = " << inputTriangle.perimeter << endl;
+}
+//Here is the function that calls the intro: 
+int introChoice()
+{
+	int choice;
+	cout << "Welcome to our program! This is a simple trigonometric test designed to test the properties of three different types of triangles." << endl;
+	cout << "To start, please type in the number of the type of triangle you would like to calculate: " << endl;
+	cout << "1. Right Triangle" << endl;
+	cout << "2. Isocelese Triangle" << endl;
+	cout << "3. Scalene Triangle" << endl;
+	cin >> choice;
+	return choice;
+}
+
+int main()
+{
+
+	int answer = 0;
+	do
+	{
+
+		int choice = introChoice();
+		while (choice > 3 || choice <= 0)
+		{
+			cout << "Sorry, that is not a valid choice. Please select one of the above options." << endl;
+			cin >> choice;
+		}
+		if (choice == 1)
+		{
+			double side1, side2, asinA, acosA, asinB, acosB, h, atanA, atanB, area, perimeter;
+			double angle, sine, cosine, tangent, radianAngle;
+
+			cout << "Welcome! " << endl << "This is a simple trigonometric program designed to calculate the dimensions and angles of a right triangle." << endl;
+			cout << "To start off, keep in mind that any right triangle will always have a 90 degree angle within it and all angles within any triangle will equal 180 degrees.\n";
+			cout << endl;
+			cout << "        B   " << endl;
+			cout << "       /|  " << endl;
+			cout << "      / |   " << endl;
+			cout << "     /  |   " << endl;
+			cout << "    /   |     " << endl;
+			cout << " h /    |  a " << endl;
+			cout << "  /    _|  " << endl;
+			cout << " /____|_| " << endl;
+			cout << "A    b   C   " << endl;
+			cout << "First, please input a value for a and b. \n";
+			cout << "a(side1) = ";															//a == side1
+			cin >> side1;
+			cout << endl;
+			while (side1 == 0)
+			{
+				cout << "This side cannot be 0. Please input a valid number." << endl;
+				cout << "a(side1) =";
+				cin >> side1;
+				cout << endl;
+			}
+
+			cout << "b(side2) = ";															//b == side2
+			cin >> side2;
+			cout << endl;
+			while (side2 == 0)
+			{
+				cout << "This side cannot be 0. Please input a valid number." << endl;
+				cin >> side2;
+				cout << endl;
+			}
+
+			h = hypo(side1, side2);
+			cout << "The hypotenuse (h):" << h << endl;
+			area = RightTriangleArea(side1, side2);
+			cout << "The area of the triangle is: " << area << endl;
+			perimeter = RightTrianglePerimeter(side1, side2);
+			cout << "The perimeter of the triangle is: " << perimeter << endl;
+			cout << endl;
+
+			cout << "Stats on Angle A: " << endl;
+			asinA = asinAngleA(side1, side2, h);
+			{
+				cout << "Angle A using inverse sine:" << asinA << " Degrees" << endl;
+			}
+			acosA = acosAngleA(side1, side2, h);
+			{
+				cout << "Angle A using inverse cosin: " << acosA << " Degrees" << endl;
+			}
+			atanA = atanAngleA(side1, side2);
+			if (side2 != 0)
+			{
+
+
+				cout << "Angle A using inverse tangent:" << atanA << endl;
+			}
+			cout << "Reference angles for angle A includes: " << 180 - asinA << " degrees, " << 180 + asinA <<
+				" degrees, and " << 360 - asinA << " degrees." << endl;
+			cout << endl;
+			cout << endl;
+			cout << "Stats on Angle B: " << endl;
+			asinB = asinAngleB(side1, side2, h);
+			{
+				cout << "Angle B using inverse sine: " << asinB << " Degrees" << endl;
+			}
+
+			acosB = acosAngleB(side1, side2, h);
+			{
+				cout << "Angle B using inverse cosine: " << acosB << " Degrees" << endl;
+			}
+
+			atanB = atanAngleB(side1, side2);
+			if (side1 != 0)
+			{
+				cout << "Angle B using inverse tangent:" << atanB << endl;
+			}
+			cout << "Reference angles for angle B includes: " << 180 - asinB << " degrees, " << 180 + asinB <<
+				" degrees, and " << 360 - asinB << " degrees." << endl;
+			cout << endl;
+			cout << "Please input an angle or a reference angle from A or B to find out its location within a unit circle. \n"; //Quadrant locator. Interactive Unit Circle-https://www.mathsisfun.com/algebra/trig-interactive-unit-circle-flash.html
+			cin >> angle;
+			cout << endl;
+
+			//Interactive Unit Circle. 
+		https://www.mathsisfun.com/algebra/trig-interactive-unit-circle.html
+			quad(angle);
+
+			if (angle > 180 && angle <= 360)				//Taylor expansion is valid for angles between 0 and PI
+			{
+				angle = -(360 - angle);
+			}
+
+			radianAngle = (PI * angle) / 180;				//convert angle to radians in order to calculate place on unit circle correctly
+			cosine = 1 - (pow(radianAngle, 2) / twoFactorial) + (pow(radianAngle, 4) / fourFactorial) - (pow(radianAngle, 6) / sixFactorial) + (pow(radianAngle, 8) / eightFactorial);
+			sine = radianAngle - (pow(radianAngle, 3) / threeFactorial) + (pow(radianAngle, 5) / fiveFactorial) - (pow(radianAngle, 7) / sevenFactorial) + (pow(radianAngle, 9) / nineFactorial);
+			tangent = sine / cosine;
+
+
+
+			cout << "Sine of " << angle << " degrees equals " << sine << endl;
+			cout << "Cosine of " << angle << " degrees equals " << cosine << endl;
+			cout << "Tangent of " << angle << " degrees equals " << tangent << endl;
+
+		}
+		else if (choice == 2)
+		{
+			float l, a, b, A, V, area, perimeter;
+			cout << "                     " << endl;
+			cout << "           V         " << endl;
+			cout << "          /|\\       " << endl;
+			cout << "         / | \\      " << endl;
+			cout << "        /  |  \\     " << endl;
+			cout << "       /   |a  \\ l  " << endl;
+			cout << "      /   _|_   \\   " << endl;
+			cout << "     /___|_|_|___\\  " << endl;
+			cout << "   A         b     A " << endl;
+			cout << "This is a simple triangle to calculate the length and angles of an Isosceles  triangle. In an Isosceles  triangle, both legs are equal. " << endl;
+			cout << "Please input the length of the leg and the base of the triangle: " << endl;
+			cout << "l(leg) = ";
+			cin >> l;
+			cout << endl;
+			while (l == 0)
+			{
+				cout << "The length of the leg cannot be equal to zero. Please input another number." << endl;
+				cin >> l;
+				cout << endl;
+			}
+			cout << "b(base) = ";
+			cin >> b;
+			cout << endl;
+			while (b == 0)
+			{
+				cout << "The length of the base cannot be equal to zero. Please input another number." << endl;
+				cin >> b;
+				cout << endl;
+			}
+			a = isotrianglealt(l, b);
+			cout << "The altitude (a) of the triangle is " << a << endl;
+			A = acosisoAngleA(l, b, a);
+			cout << "Both A Angles (A) are equal to " << A << endl;
+			V = acosApex(b, l);
+			cout << "The Apex Angle (V) equals " << V << endl;
+			area = isoTriangleArea(b, a);
+			cout << "The area of the triangle is " << area << endl;
+			perimeter = isoTrianglePerimeter(b, l);
+			cout << "The perimeter of the triangle is " << perimeter << endl;
+		}
+		else if (choice == 3)
+		{
+			struct ScaleneTriangle myTriangle;
+			cout << "             V            " << endl;
+			cout << "             *       " << endl;
+			cout << "           * * *      " << endl;
+			cout << "          *  *   *     " << endl;
+			cout << "     a   *   *h    *  c  " << endl;
+			cout << "        *    *       *   " << endl;
+			cout << "       *     *         * " << endl;
+			cout << "    A ******************* B" << endl;
+			cout << "             b                   " << endl;
+			cout << endl;
+			cout << "This is a simple program to calculate the properties of a scalene triangle. In a scalene triangle, no sides are equal." << endl;
+			cout << endl;
+			cout << "First, please enter side 1(a) for your triangle: ";
+			cin >> myTriangle.side1;
+			cout << endl;
+			while (myTriangle.side1 == 0)
+			{
+				cout << "Side 1 cannot be zero. Please enter a valid number." << endl;
+				cin >> myTriangle.side1;
+				cout << endl;
+			}
+			cout << "Enter the base (b) for your triangle: ";
+			cin >> myTriangle.base;
+			cout << endl;
+			while (myTriangle.base == 0)
+			{
+				cout << "The base cannot be zero. Please enter a valid number." << endl;
+				cin >> myTriangle.base;
+				cout << endl;
+			}
+			while (myTriangle.base == myTriangle.side1)
+			{
+				cout << "Remember, a scalene triangle cannot be equal. Please enter new values that are not equal to each other. " << endl;
+				cout << "Please enter side 1(a) for your triangle: ";
+				cin >> myTriangle.side1;
+				cout << endl;
+				while (myTriangle.side1 == 0)
+				{
+					cout << "Side 1 cannot be zero. Please enter a valid number." << endl;
+					cin >> myTriangle.side1;
+					cout << endl;
+				}
+				cout << "Enter the base (b) for your triangle: ";
+				cin >> myTriangle.base;
+				cout << endl;
+				while (myTriangle.base == 0)
+				{
+					cout << "The base cannot be zero. Please enter a valid number." << endl;
+					cin >> myTriangle.base;
+					cout << endl;
+				}
+			}
+			cout << "Enter Angle A (A) in your triangle: ";
+			cin >> myTriangle.angleA;
+			cout << endl;
+			ScaleneSide2(myTriangle);
+			if (myTriangle.b1 > myTriangle.base)
+			{
+				
+				cout << "Based on what you inputted, this is an impossible triangle." << endl;
+			}
+
+			else
+			{
+				ScaleneHeight(myTriangle);
+				ScaleneSide2(myTriangle);
+				cout << "Side 2 (c) = " << myTriangle.side2 << endl;
+				ScaleneAngleB(myTriangle);
+				ScaleneApexAngle(myTriangle);
+				ScaleneArea(myTriangle);
+				ScalenePerimeter(myTriangle);
+			}
+		}
+
+
+
+		cout << "Would you like to try a different choice? Yes=1 or No=2" << endl;
+		cin >> answer;
+	} while (answer == 1);
+
+	//GitHub link for full code. https://github.com/inookshook/CompSci-Final-Project/edit/master/Finished%20Product!!!
+
+	return 0;
+}
